@@ -4,6 +4,7 @@
 """
 Astronomiens fundament 2019
 """
+import numpy as np
 import matplotlib.pyplot as plt
 import scipy.special
 from astropy.io import fits

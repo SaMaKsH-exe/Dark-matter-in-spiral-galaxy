@@ -13,7 +13,8 @@ from scipy.optimize import curve_fit
 plt.close('all')
 
 #Loading 21 cm line data
-data_21 = np.loadtxt('21cmwork/21cm.data')
+data_21 = np.loadtxt('/Users/samakshkaushik/Desktop/Projects/Dark-matter-in-spiral-galaxy/UGC914/21cm.data')
+
 velocity_21 = data_21[:,0]
 flux_21 = data_21[:,1]+2.1
 
@@ -49,7 +50,7 @@ def CiruclarSpeedExponentialDisk(y):
 
 
 #Load wavelength measurements 
-data = np.loadtxt('lambda.data')
+data = np.loadtxt('/Users/samakshkaushik/Desktop/Projects/Dark-matter-in-spiral-galaxy/UGC914/lambda_ugc914.data')
 afstand15 = np.array(data[:,0])
 peaket15 = np.array(data[:,1])
 usikkerhed15 = np.array(data[:,2])
@@ -73,7 +74,6 @@ newusikkerhedafstand15 = [2*i for i in usikkerhedafstand15] #2sigma på afstand 
 #beregner hastighed
 znew = Redshift(peaket15)
 znew_err = newusikkerhed15 / lmbd_em
-#
 vnew = c * znew + 24.8
 vnew_err = c * znew_err
 

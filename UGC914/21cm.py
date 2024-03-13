@@ -13,7 +13,7 @@ plt.close('all')
 
 
 #Loading 21 cm line data
-data_21 = np.loadtxt('21cmwork/21cm.data')
+data_21 = np.loadtxt('/Users/samakshkaushik/Desktop/Projects/Dark-matter-in-spiral-galaxy/UGC914/21cm.data')
 velocity_21 = data_21[:,0]
 flux_21 = data_21[:,1]+2.2
 

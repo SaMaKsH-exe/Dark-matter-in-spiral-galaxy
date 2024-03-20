@@ -131,3 +131,4 @@ plt.plot(-x,-vc_r,color='tab:red')
 plt.show()
 
 
+

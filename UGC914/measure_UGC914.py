@@ -6,9 +6,9 @@ Astronomiens fundament 2019
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.special    
 from astropy.io import fits
 from scipy.optimize import curve_fit
+from matplotlib.widgets import Button
 
 plt.close('all')
 
@@ -147,28 +147,50 @@ val, cov = curve_fit(
     gauss_function, wl[goodRange], newFlux, p0=newinitialParameters)
 # giver optimerede værdier for lambda samt usikkerheder
 
-# gaussfittet
+# Create the figure and axes
+fig, ax = plt.subplots()
 
+# Plot initial data
+line_data, = ax.plot(wl[goodRange], newFlux, '.', mec='k', label='Data')
+line_fit, = ax.plot(np.linspace(6550, 6680, 1000), gauss_function(np.linspace(6550, 6680, 1000), *val), '-', c='#fc5a50',
+         label='Gaussian fit')
+ax.set_ylabel('Signal')
+ax.set_xlabel('Wavelength [Å]')
+ax.legend(loc='upper left', fancybox=True, shadow=True, framealpha=1,
+           facecolor='#d8dcd6', edgecolor='black', prop={'size': 8}, markerscale=2)
+ax.set_xlim(6550, 6680)
 
-def newPlotEmissionline():
-    plt.figure()
-    plt.plot(wl[goodRange], newFlux, '.', mec='k', label='Data')
-    plt.plot(np.linspace(6550, 6680, 1000), gauss_function(np.linspace(6550, 6680, 1000), *val), '-', c='#fc5a50',
-             label='Gaussian fit')
-    plt.ylabel('Signal')
-    plt.xlabel('Wavelength [Å]')
-    plt.legend(loc='upper left', fancybox=True, shadow=True, framealpha=1,
-               facecolor='#d8dcd6', edgecolor='black', prop={'size': 8}, markerscale=2)
-    plt.xlim(6550, 6680)
-    plt.show()
-    return
+# Define the "Next" and "Previous" button positions
+button_next_ax = plt.axes([0.7, 0.05, 0.1, 0.075])
+button_prev_ax = plt.axes([0.81, 0.05, 0.1, 0.075])
 
+# Create the "Next" and "Previous" buttons
+button_next = Button(button_next_ax, 'Next')
+button_prev = Button(button_prev_ax, 'Previous')
 
-newPlotEmissionline()
+# Function to handle "Next" button click
+def next_clicked(event):
+    global n
+    n = min(n + 1, len(x) - 1)
+    update_plot()
 
-# Distance
-afstand = (n*binSize-ncenter)*pixel_scale*kpc_per_arc  # skaleret afstand
+# Function to handle "Previous" button click
+def prev_clicked(event):
+    global n
+    n = max(n - 1, 0)
+    update_plot()
 
-print('Peaket er i '+str(val[1])+' Å')
-print('Usikkerheden er '+str(np.sqrt(cov[1][1])) + ' Å')
-print('Afstanden er '+str(afstand)+' kpc')
+# Connect button click events to their respective functions
+button_next.on_clicked(next_clicked)
+button_prev.on_clicked(prev_clicked)
+
+# Function to update plot
+def update_plot():
+    newFlux = BaseLineZero(flux[n])
+    val, cov = curve_fit(gauss_function, wl[goodRange], newFlux, p0=newinitialParameters)
+    line_data.set_ydata(newFlux)
+    line_fit.set_ydata(gauss_function(np.linspace(6550, 6680, 1000), *val))
+    ax.set_title(f"Bin {n}")  # Update title
+    plt.draw()
+
+plt.show()

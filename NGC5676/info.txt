@@ -1,0 +1,9 @@
+66
+/Users/samakshkaushik/Desktop/Projects/Dark-matter-in-spiral-galaxy/NGC5676/ngc5676_2d.fits
+0.188
+0.00699
+765
+15
+6615
+2.5
+a
